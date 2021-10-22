@@ -1,0 +1,58 @@
+{
+    "taikhoan":[
+        {
+            "id":1,
+            "username":"TK001",
+            "passwd":"$2b$09$8jDKp8frkjZrSfb.b/PZPONTA60aZWibKfT19DvTI4BlO3/tifjdG",
+            "gioitinh":"nu",
+            "sdt":"0987406552"          
+        },
+        {
+            "id":2,
+            "username":"TK002",
+            "passwd":"$2b$09$lxpxTmdP96FBHR.f8Wfc9uU2PRUVpKo8kAhX1YcPcQInfeOd0Wnwi",
+            "gioitinh":"nam",
+            "sdt":"0986334654"
+        },
+        {
+            "id":3,
+            "username":"TK003",
+            "passwd":"TK003",
+            "gioitinh":"nam",
+            "sdt":"0987106341"
+        }
+    ],
+    "baidang":[
+                {
+                    "id":1,
+                    "idbaidang":"BD01",
+                    "tieude":"Bán nhà 12 tỷ",
+                    "mota":"mua liền đi",
+                    "canho":[
+                        {
+                            "idCH":"CH01",
+                            "tenCH":"căn hộ tầng thượng chung cư An Bình",
+                            "dientich":83.3,
+                            "mucgia":12.5,
+                            "tangso":12,
+                            "sophongngu":2,
+                            "sophongvs":2,
+                            "noithat":"cơ bản",
+                            "phapli":"sổ hồng",
+                            "idChungCu":"CC01",
+                            "tenchungcu":"An Bình",
+                            "idDiaChi":"DC01",
+                            "duong":"3/2",
+                            "idQuan":"Q01",
+                            "tenQuan":"Ninh Kiều",
+                            "hinhanh":[
+                                {
+                                    "idHA":"HA01",
+                                    "tenHA":"images.chungcuAnBinh"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+}
