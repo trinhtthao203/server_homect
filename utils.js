@@ -4,7 +4,7 @@ function generateToken(user) {
   if (!user) return null;
 
   var u = {
-    user_id: user.user_id,
+    user_id: user.userid,
     userName: user.userName,
     fullName:user.fullName,
     isMale:user.isMale,
@@ -19,7 +19,7 @@ function generateToken(user) {
 function getCleanUser(user) {
   if (!user) return null;
   return {
-    user_id: user.user_id,
+    user_id: user.userid,
     username: user.username,
     fullname:user.fullname,
     ismale:user.ismale,

@@ -9,6 +9,7 @@ const cors = require('cors');
 const app     = express();
 const port = process.env.PORT || 4000;
 const {pool} = require('./db.config');
+const { response } = require('express');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -40,13 +41,24 @@ app.use(function (req, res, next) {
 //api get data from progres
 app.get("/taikhoan",function(req,res){ 
     //get data
-    pool.query('SELECT * FROM taikhoan ORDER BY user_id ASC', (err, response) => {
+    pool.query('SELECT * FROM taikhoan ORDER BY userid ASC', (err, response) => {
       if(err){
         console.log(err);
       }else{
         res.send(response.rows);
       }   
     })
+});
+
+app.get("/baidang", function(req, res) {
+  pool.query('SELECT * FROM baidang AS a, taikhoan AS b WHERE a.userid = b.userid', (err, response) => {
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.send(response.rows);
+    }
+  })
 });
 
 app.post('/taikhoan/register',(req, res)=> {  
