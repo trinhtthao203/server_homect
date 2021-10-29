@@ -51,7 +51,7 @@ app.get("/taikhoan",function(req,res){
 });
 
 app.get("/baidang", function(req, res) {
-  pool.query('SELECT * FROM baidang AS a, taikhoan AS b WHERE a.userid = b.userid', (err, response) => {
+  pool.query('SELECT b.fullname, a.*, c.*, d.url,e.tenchungcu, e.toado FROM baidang AS a, taikhoan AS b, canhoban AS c, hinhanh AS d, chungcu AS e WHERE a.userid = b.userid and a.idbaidang = c.idbaidang and c.idanh = d.idanh and c.idchungcu = e.idchungcu', (err, response) => {
     if(err){
       console.log(err);
     }
