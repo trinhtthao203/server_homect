@@ -51,7 +51,20 @@ app.get("/taikhoan",function(req,res){
 });
 
 app.get("/baidang", function(req, res) {
-  pool.query('SELECT * FROM baidang AS a, taikhoan AS b WHERE a.userid = b.userid', (err, response) => {
+  pool.query('SELECT b.fullname, b.phonenumber, a.*, c.*, d.url,e.tenchungcu, e.toado FROM baidang AS a, taikhoan AS b, canhoban AS c, hinhanh AS d, chungcu AS e WHERE a.userid = b.userid and a.idbaidang = c.idbaidang and c.idanh = d.idanh and c.idchungcu = e.idchungcu', (err, response) => {
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.send(response.rows);
+    }
+  })
+});
+
+app.post("/baidang/id", function(req, res) {
+  const { idbaidang
+  }= req.body;
+  pool.query('SELECT b.fullname, b.phonenumber, a.*, c.*, d.url,e.tenchungcu, e.toado FROM baidang AS a, taikhoan AS b, canhoban AS c, hinhanh AS d, chungcu AS e WHERE a.userid = b.userid and a.idbaidang = c.idbaidang and c.idanh = d.idanh and c.idchungcu = e.idchungcu and a.idbaidang=$1',[idbaidang], (err, response) => {
     if(err){
       console.log(err);
     }
