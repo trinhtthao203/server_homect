@@ -90,7 +90,7 @@ app.get("/tenduong", function (req, res) {
 app.post("/baidang/id", function (req, res) {
   const { idbaidang } = req.body;
   pool.query(
-    "SELECT * FROM baidang bd INNER JOIN taikhoan tk ON bd.userid=tk.userid WHERE bd.idbaidang=$1",
+    "SELECT * FROM baidang bd INNER JOIN taikhoan tk ON bd.userid=tk.userid INNER JOIN chungcu cc ON bd.idchungcu = cc.idchungcu WHERE bd.idbaidang=$1",
     [idbaidang],
     (err, response) => {
       if (err) {
