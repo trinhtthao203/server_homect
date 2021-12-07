@@ -97,6 +97,43 @@ app.post("/baidang/id", function (req, res) {
   );
 });
 
+app.post("/loadChungCu", (req, res) => {
+  try {
+    const { tenchungcu, lat, lng, diachi, tenduong, quan } = req.body;
+    console.log(typeof lat);
+    console.log(typeof lng);
+    console.log(typeof quan);
+
+    if (!tenchungcu || !quan || !tenduong) {
+      return res.status(400).json({
+        error: true,
+        message: "Vui lòng nhập các trường bắt buộc!",
+      });
+    } else if (!lat || !lng) {
+      return res.status(401).json({
+        error: true,
+        message: "Vui lòng chọn 1 tọa độ trên bản đồ!",
+      });
+    }
+    pool.query(
+      "INSERT INTO chungcu(tenchungcu, toado, diachi, tenduong, idquan) VALUES ($1,POINT($2,$3),$4,$5,$6)",
+      [tenchungcu, lng, lat, diachi, tenduong, parseInt(quan)],
+      (err, response) => {
+        if (err) {
+          return res.status(403).json({
+            error: true,
+            message: "Có lỗi vui lòng kiểm tra lại!",
+          });
+        } else {
+          return res.json(response.rows);
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 app.post("/loadBaiDang", (req, res) => {
   try {
     const {
@@ -293,4 +330,20 @@ app.get("/verifyToken", function (req, res) {
     var userObj = utils.getCleanUser(user);
     return res.json({ user: userObj, token });
   });
+});
+
+app.delete("/delBaiDang/:idbaidang", function (req, res) {
+  pool.query(
+    `DELETE FROM baidang WHERE idbaidang=${req.params.idbaidang}`,
+    (err, response) => {
+      if (err) {
+        return res.status(403).json({
+          error: true,
+          message: "Có lỗi vui lòng kiểm tra lại!",
+        });
+      } else {
+        return res.json(response.rows);
+      }
+    }
+  );
 });
