@@ -47,10 +47,9 @@ app.get("/taikhoan", function (req, res) {
   });
 });
 
-app.get("/baidang", function (req, res) {
-  pool.query(
-    "SELECT * FROM baidang bd INNER JOIN taikhoan tk ON bd.userid=tk.userid",
-    (err, response) => {
+
+app.get("/baidang", function(req, res) {
+  pool.query('SELECT b.fullname, b.phonenumber, a.* FROM baidang AS a, taikhoan AS b WHERE a.userid = b.userid', (err, response) => {
       if (err) {
         console.log(err);
       } else {
@@ -59,6 +58,7 @@ app.get("/baidang", function (req, res) {
     }
   );
 });
+
 app.get("/chungcu", function (req, res) {
   //get data
   pool.query(
@@ -73,19 +73,14 @@ app.get("/chungcu", function (req, res) {
   );
 });
 
-app.get("/tenduong", function (req, res) {
-  //get data
-  pool.query(
-    "SELECT tenduong FROM chungcu ORDER BY tenduong ASC ",
-    (err, response) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send(response.rows);
-      }
-    }
-  );
-});
+
+app.post("/baidang/id", function(req, res) {
+  const { idbaidang
+  }= req.body;
+  pool.query('SELECT b.fullname, b.phonenumber, a.*, c.tenchungcu, c.toado FROM baidang AS a, taikhoan AS b, chungcu AS c WHERE a.userid = b.userid and a.idchungcu = c.idchungcu and a.idbaidang=$1',[idbaidang], (err, response) => {
+    if(err){
+      console.log(err);
+
 
 app.post("/baidang/id", function (req, res) {
   const { idbaidang } = req.body;
