@@ -9,6 +9,7 @@ const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 4000;
 const { pool } = require("./db.config");
+const { response } = require("express");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -38,13 +39,41 @@ app.use(function (req, res, next) {
 //api get data from progres
 app.get("/taikhoan", function (req, res) {
   //get data
-  pool.query("SELECT * FROM taikhoan ORDER BY user_id ASC", (err, response) => {
+  pool.query("SELECT * FROM taikhoan ORDER BY userid ASC", (err, response) => {
     if (err) {
       console.log(err);
     } else {
       res.send(response.rows);
     }
   });
+});
+
+app.get("/baidang", function (req, res) {
+  pool.query(
+    "SELECT b.fullname, b.phonenumber, a.*, c.*, d.url,e.tenchungcu, e.toado FROM baidang AS a, taikhoan AS b, canhoban AS c, hinhanh AS d, chungcu AS e WHERE a.userid = b.userid and a.idbaidang = c.idbaidang and c.idanh = d.idanh and c.idchungcu = e.idchungcu",
+    (err, response) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(response.rows);
+      }
+    }
+  );
+});
+
+app.post("/baidang/id", function (req, res) {
+  const { idbaidang } = req.body;
+  pool.query(
+    "SELECT b.fullname, b.phonenumber, a.*, c.*, d.url,e.tenchungcu, e.toado FROM baidang AS a, taikhoan AS b, canhoban AS c, hinhanh AS d, chungcu AS e WHERE a.userid = b.userid and a.idbaidang = c.idbaidang and c.idanh = d.idanh and c.idchungcu = e.idchungcu and a.idbaidang=$1",
+    [idbaidang],
+    (err, response) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(response.rows);
+      }
+    }
+  );
 });
 
 app.post("/taikhoan/register", (req, res) => {
