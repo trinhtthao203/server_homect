@@ -51,7 +51,7 @@ app.get("/taikhoan",function(req,res){
 });
 
 app.get("/baidang", function(req, res) {
-  pool.query('SELECT b.fullname, b.phonenumber, a.*, c.*, d.url,e.tenchungcu, e.toado FROM baidang AS a, taikhoan AS b, canhoban AS c, hinhanh AS d, chungcu AS e WHERE a.userid = b.userid and a.idbaidang = c.idbaidang and c.idanh = d.idanh and c.idchungcu = e.idchungcu', (err, response) => {
+  pool.query('SELECT b.fullname, b.phonenumber, a.* FROM baidang AS a, taikhoan AS b WHERE a.userid = b.userid', (err, response) => {
     if(err){
       console.log(err);
     }
@@ -61,10 +61,27 @@ app.get("/baidang", function(req, res) {
   })
 });
 
+app.get("/geometry", function(req, res) {
+  pool.query(
+    `select json_build_object(
+      'type', 'FeatureCollection',
+      'features', json_agg(ST_AsGeoJSON(t.*)::json)
+    )
+    from vdgeo as t(ten);`
+  , (err, response) => {
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.send(response.rows[0].json_build_object);
+    }
+  })
+});
+
 app.post("/baidang/id", function(req, res) {
   const { idbaidang
   }= req.body;
-  pool.query('SELECT b.fullname, b.phonenumber, a.*, c.*, d.url,e.tenchungcu, e.toado FROM baidang AS a, taikhoan AS b, canhoban AS c, hinhanh AS d, chungcu AS e WHERE a.userid = b.userid and a.idbaidang = c.idbaidang and c.idanh = d.idanh and c.idchungcu = e.idchungcu and a.idbaidang=$1',[idbaidang], (err, response) => {
+  pool.query('SELECT b.fullname, b.phonenumber, a.*, c.tenchungcu, c.toado FROM baidang AS a, taikhoan AS b, chungcu AS c WHERE a.userid = b.userid and a.idchungcu = c.idchungcu and a.idbaidang=$1',[idbaidang], (err, response) => {
     if(err){
       console.log(err);
     }
