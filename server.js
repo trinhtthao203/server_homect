@@ -48,9 +48,10 @@ app.get("/taikhoan", function (req, res) {
   });
 });
 
-app.get("/baidang", function (req, res) {
+app.get("/chungcu", function (req, res) {
+  //get data
   pool.query(
-    "SELECT b.fullname, b.phonenumber, a.*, c.*, d.url,e.tenchungcu, e.toado FROM baidang AS a, taikhoan AS b, canhoban AS c, hinhanh AS d, chungcu AS e WHERE a.userid = b.userid and a.idbaidang = c.idbaidang and c.idanh = d.idanh and c.idchungcu = e.idchungcu",
+    "SELECT * FROM chungcu ORDER BY idchungcu ASC",
     (err, response) => {
       if (err) {
         console.log(err);
@@ -64,7 +65,7 @@ app.get("/baidang", function (req, res) {
 app.post("/baidang/id", function (req, res) {
   const { idbaidang } = req.body;
   pool.query(
-    "SELECT b.fullname, b.phonenumber, a.*, c.*, d.url,e.tenchungcu, e.toado FROM baidang AS a, taikhoan AS b, canhoban AS c, hinhanh AS d, chungcu AS e WHERE a.userid = b.userid and a.idbaidang = c.idbaidang and c.idanh = d.idanh and c.idchungcu = e.idchungcu and a.idbaidang=$1",
+    "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu  and a.idbaidang=$1",
     [idbaidang],
     (err, response) => {
       if (err) {
@@ -76,87 +77,9 @@ app.post("/baidang/id", function (req, res) {
   );
 });
 
-app.post("/taikhoan/register", (req, res) => {
-  try {
-    const { userName, fullName, phoneNumber, isMale, passwd, confirmPasswd } =
-      req.body;
-    if (
-      !userName ||
-      !fullName ||
-      !phoneNumber ||
-      !isMale ||
-      !passwd ||
-      !confirmPasswd
-    ) {
-      return res.status(400).json({
-        error: true,
-        message: "Vui lòng nhập tất cả các trường !",
-      });
-    } else if (passwd != confirmPasswd) {
-      return res.status(402).json({
-        error: true,
-        message: "Mật khẩu xác nhận không trùng khớp!",
-      });
-    } else if (5 > passwd.length || passwd.length > 20) {
-      return res.status(403).json({
-        error: true,
-        message: "Mật khẩu tối thiểu 5 ký tự - tối đa 20 ký tự!",
-      });
-    }
-
-    let query =
-      "INSERT INTO taikhoan(userName, fullName, isMale, phoneNumber, passwd) VALUES ($1,$2,$3,$4,$5)";
-    let values = [userName, fullName, isMale, phoneNumber, passwd];
-    pool.query(query, values, (err, response) => {
-      if (err) {
-        return res.status(401).json({
-          error: true,
-          message: "Tài khoản đã tồn tại",
-        });
-      } else {
-        console.log("Register success!!!");
-        return res.json(response.rows);
-      }
-    });
-  } catch (err) {
-    console.log(err.message);
-  }
-});
-
-app.post("/taikhoan/signin", (req, res) => {
-  const { userName, passwd } = req.body;
-
-  if (!userName || !passwd) {
-    return res.status(400).json({
-      error: true,
-      message: "Chưa nhập tài khoản hoặc mật khẩu. Vui lòng kiểm tra lại.",
-    });
-  }
-  pool.query(
-    "SELECT * FROM taikhoan WHERE userName=$1 AND passwd=$2",
-    [userName, passwd],
-    (err, response) => {
-      if (response.rows.length <= 0) {
-        return res.status(401).json({
-          error: true,
-          message: "Tài khoản hoặc mật khẩu chưa đúng!",
-        });
-      } else {
-        console.log("Login success!!!");
-        // generate token
-        const token = utils.generateToken(...response.rows);
-        // get basic user details
-        const userObj = utils.getCleanUser(...response.rows);
-        // return the token along with user details
-        return res.json({ user: userObj, token });
-      }
-    }
-  );
-});
-
 app.get("/baidang", function (req, res) {
   pool.query(
-    "SELECT * FROM baidang AS a, taikhoan AS b WHERE a.username = b.username",
+    "SELECT * FROM baidang AS a, taikhoan AS b WHERE a.userid = b.userid",
     (err, response) => {
       if (err) {
         console.log(err);
