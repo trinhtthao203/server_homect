@@ -89,7 +89,6 @@ app.get("/baidang", function (req, res) {
     }
   );
 });
-
 app.post("/loadChungCu", (req, res) => {
   try {
     const { tenchungcu, lat, lng, diachi, tenduong, quan } = req.body;
