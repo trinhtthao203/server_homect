@@ -220,6 +220,105 @@ app.post("/loadBaiDang", (req, res) => {
   }
 });
 
+app.get("/quan", function (req, res) {
+  pool.query(
+    "SELECT * FROM quan",
+    (err, response) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(response.rows);
+      }
+    }
+  );
+});
+
+app.post("/timkiem/idquan", function (req, res) {
+  const { idquan, mucgia } = req.body;
+  if(idquan == 30 || idquan == 0){
+      if(mucgia == 1){
+        pool.query(
+          "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu order by a.mucgia",
+          (err, response) => {
+            if (err) {
+              console.log(err);
+            } else {
+              res.send(response.rows);
+            }
+          }
+        );
+      }
+      else if(mucgia== 2){
+        pool.query(
+          "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu order by a.mucgia desc",
+       
+          (err, response) => {
+            if (err) {
+              console.log(err);
+            } else {
+              res.send(response.rows);
+            }
+          }
+        );
+        }
+        else{
+          pool.query(
+            "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu",
+            (err, response) => {
+              if (err) {
+                console.log(err);
+              } else {
+                res.send(response.rows);
+              }
+            }
+          );
+          }
+        
+      }
+      else{
+        if(mucgia == 1){
+          pool.query(
+            "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu and c.idquan=$1 order by a.mucgia asc",
+            [idquan],
+            (err, response) => {
+              if (err) {
+                console.log(err);
+              } else {
+                res.send(response.rows);
+              }
+            }
+          );
+        }
+        else if(mucgia == 2){
+          pool.query(
+            "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu and c.idquan=$1 order by a.mucgia desc",
+            [idquan],
+            (err, response) => {
+              if (err) {
+                console.log(err);
+              } else {
+                res.send(response.rows);
+              }
+            }
+          );
+          }
+          else{
+            pool.query(
+              "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu and c.idquan=$1",
+              [idquan],
+              (err, response) => {
+                if (err) {
+                  console.log(err);
+                } else {
+                  res.send(response.rows);
+                }
+              }
+            );
+            }
+          }
+      
+});
+
 app.post("/taikhoan/register", (req, res) => {
   try {
     const { userName, fullName, phoneNumber, isMale, passwd, confirmPasswd } =
