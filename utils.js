@@ -9,6 +9,7 @@ function generateToken(user) {
     fullName: user.fullName,
     isMale: user.isMale,
     phoneNumber: user.phoneNumber,
+    quyensd: user.quyensd,
   };
 
   return jwt.sign(u, process.env.JWT_SECRET, {
@@ -24,6 +25,7 @@ function getCleanUser(user) {
     fullname: user.fullname,
     ismale: user.ismale,
     phonenumber: user.phonenumber,
+    quyensd: user.quyensd,
   };
 }
 

@@ -221,102 +221,102 @@ app.post("/loadBaiDang", (req, res) => {
 });
 
 app.get("/quan", function (req, res) {
-  pool.query(
-    "SELECT * FROM quan",
-    (err, response) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send(response.rows);
-      }
+  pool.query("SELECT * FROM quan", (err, response) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(response.rows);
     }
-  );
+  });
+});
+
+app.get("/chungcu", function (req, res) {
+  pool.query("SELECT * FROM chungcu", (err, response) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(response.rows);
+    }
+  });
 });
 
 app.post("/timkiem/idquan", function (req, res) {
   const { idquan, mucgia } = req.body;
-  if(idquan == 30 || idquan == 0){
-      if(mucgia == 1){
-        pool.query(
-          "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu order by a.mucgia",
-          (err, response) => {
-            if (err) {
-              console.log(err);
-            } else {
-              res.send(response.rows);
-            }
+  if (idquan == 30 || idquan == 0) {
+    if (mucgia == 1) {
+      pool.query(
+        "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu order by a.mucgia",
+        (err, response) => {
+          if (err) {
+            console.log(err);
+          } else {
+            res.send(response.rows);
           }
-        );
-      }
-      else if(mucgia== 2){
-        pool.query(
-          "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu order by a.mucgia desc",
-       
-          (err, response) => {
-            if (err) {
-              console.log(err);
-            } else {
-              res.send(response.rows);
-            }
-          }
-        );
         }
-        else{
-          pool.query(
-            "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu",
-            (err, response) => {
-              if (err) {
-                console.log(err);
-              } else {
-                res.send(response.rows);
-              }
-            }
-          );
+      );
+    } else if (mucgia == 2) {
+      pool.query(
+        "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu order by a.mucgia desc",
+
+        (err, response) => {
+          if (err) {
+            console.log(err);
+          } else {
+            res.send(response.rows);
           }
-        
-      }
-      else{
-        if(mucgia == 1){
-          pool.query(
-            "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu and c.idquan=$1 order by a.mucgia asc",
-            [idquan],
-            (err, response) => {
-              if (err) {
-                console.log(err);
-              } else {
-                res.send(response.rows);
-              }
-            }
-          );
         }
-        else if(mucgia == 2){
-          pool.query(
-            "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu and c.idquan=$1 order by a.mucgia desc",
-            [idquan],
-            (err, response) => {
-              if (err) {
-                console.log(err);
-              } else {
-                res.send(response.rows);
-              }
-            }
-          );
+      );
+    } else {
+      pool.query(
+        "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu",
+        (err, response) => {
+          if (err) {
+            console.log(err);
+          } else {
+            res.send(response.rows);
           }
-          else{
-            pool.query(
-              "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu and c.idquan=$1",
-              [idquan],
-              (err, response) => {
-                if (err) {
-                  console.log(err);
-                } else {
-                  res.send(response.rows);
-                }
-              }
-            );
-            }
+        }
+      );
+    }
+  } else {
+    if (mucgia == 1) {
+      pool.query(
+        "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu and c.idquan=$1 order by a.mucgia asc",
+        [idquan],
+        (err, response) => {
+          if (err) {
+            console.log(err);
+          } else {
+            res.send(response.rows);
           }
-      
+        }
+      );
+    } else if (mucgia == 2) {
+      pool.query(
+        "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu and c.idquan=$1 order by a.mucgia desc",
+        [idquan],
+        (err, response) => {
+          if (err) {
+            console.log(err);
+          } else {
+            res.send(response.rows);
+          }
+        }
+      );
+    } else {
+      pool.query(
+        "SELECT * FROM baidang AS a, taikhoan AS b, chungcu c  WHERE a.userid = b.userid and a.idchungcu=c.idchungcu and c.idquan=$1",
+        [idquan],
+        (err, response) => {
+          if (err) {
+            console.log(err);
+          } else {
+            res.send(response.rows);
+          }
+        }
+      );
+    }
+  }
 });
 
 app.post("/taikhoan/register", (req, res) => {
@@ -348,7 +348,7 @@ app.post("/taikhoan/register", (req, res) => {
     }
 
     let query =
-      "INSERT INTO taikhoan(userName, fullName, isMale, phoneNumber, passwd) VALUES ($1,$2,$3,$4,$5)";
+      "INSERT INTO taikhoan(userName, fullName, isMale, phoneNumber, passwd, quyensd) VALUES ($1,$2,$3,$4,$5,0)";
     let values = [userName, fullName, isMale, phoneNumber, passwd];
     pool.query(query, values, (err, response) => {
       if (err) {
@@ -426,6 +426,23 @@ app.get("/verifyToken", function (req, res) {
 app.delete("/delBaiDang/:idbaidang", function (req, res) {
   pool.query(
     `DELETE FROM baidang WHERE idbaidang=${req.params.idbaidang}`,
+    (err, response) => {
+      if (err) {
+        return res.status(403).json({
+          error: true,
+          message: "Có lỗi vui lòng kiểm tra lại!",
+        });
+      } else {
+        return res.json(response.rows);
+      }
+    }
+  );
+});
+
+app.delete("/delChungCu/:idchungcu", function (req, res) {
+  console.log(req.params.idchungcu);
+  pool.query(
+    `DELETE FROM chungcu WHERE idchungcu=${req.params.idchungcu}`,
     (err, response) => {
       if (err) {
         return res.status(403).json({
